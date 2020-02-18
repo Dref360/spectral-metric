@@ -6,8 +6,8 @@ import scipy.spatial
 from scipy.sparse.csgraph import laplacian
 from sklearn.manifold import Isomap
 
-from config import log
-from lib import find_samples, compute_expectation_with_monte_carlo
+from spectral_metric.config import log
+from spectral_metric.lib import find_samples, compute_expectation_with_monte_carlo
 
 
 class CumulativeGradientEstimator(object):

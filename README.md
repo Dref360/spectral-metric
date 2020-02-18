@@ -2,17 +2,13 @@
 
 This is the code to reproduce the CVPR 2019 paper : Spectral Metric for Dataset Complexity Assessment. 
 
-CSG is a mesure which estimate the complexity of a dataset by combining probability product kernel (Jebara et al.) and Graph Theory.
+CSG is a measure which estimates the complexity of a dataset by combining probability product kernel (Jebara et al.) and Graph Theory.
 
 ## Module
 ``` bash
-$COMPLEXITY
+$COMPLEXITY/spectral_metric
 ├── visualize.py
 |   - Visualize the results
-├── notebooks
-|   - **Exemple and result for the paper**
-│   ├── graph_viz.ipynb
-│   └── check_datasets.ipynb
 ├── lib.py
 |   - Common function
 ├── handle_datasets.py
@@ -54,6 +50,9 @@ Run `embedding/script.sh` to get everything (It will take a long time) otherwise
 ---
 
 ## Requirements
+
+`pip install -r requirements.txt`
+
 * Keras
 * Scikit-learn
 * joblib
@@ -64,6 +63,7 @@ Run `embedding/script.sh` to get everything (It will take a long time) otherwise
 * MulticoreTSNE (on Github)
 
 `pip install keras tensorflow-gpu scikit-learn joblib pandas tqdm seaborn`
+
 __Install MulticoreTSNE__
 ```bash
 pip install git+https://github.com/DmitryUlyanov/Multicore-TSNE.git
@@ -101,6 +101,10 @@ Here's how to run the measure on mnist and cifar10 using CNN t-SNE. This will al
 ### Advanced Usage
 ```python
 # Using estimator.CumulativeGradientEstimator
+from spectral_metric.estimator import CumulativeGradientEstimator
+from spectral_metric import visualize, config
+
+dataset_name = "my_dataset"
 data, target = ... # X_train, y_train
 # WARNINGS: data may need to be normalized and/or rescaled
 k_nearest = 3 # neigborhood size
@@ -119,14 +123,14 @@ visualize.make_graph(estimator.difference, dataset_name)
 
 # Using a test loop
 # Create a config run, see doc for more information.
-config = make_config(ds_name, embd=None, tsne=False, small=None, shuffled_class=None)
+config = config.make_config(dataset_name, embd=None, tsne=False, small=None, shuffled_class=None)
 
-config, estimators = vizualize.process_many(args, k_nearest=10, M_sample=200, loop=5)
-plot_with_err((config, estimators))
+config, estimators = visualize.process_many(args, k_nearest=10, M_sample=200, loop=5)
+visualize.plot_with_err((config, estimators))
 
 ## With many configurations
 configs = ...
-plot_with_err(*[vizualize.process_many(args, k_nearest=10, M_sample=200, loop=5) for args in configs])
+visualize.plot_with_err(*[visualize.process_many(args, k_nearest=10, M_sample=200, loop=5) for args in configs])
 
 ```
 

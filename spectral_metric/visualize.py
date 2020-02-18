@@ -8,10 +8,10 @@ from matplotlib.collections import LineCollection
 from matplotlib.font_manager import FontProperties
 from sklearn.preprocessing import quantile_transform
 
-from config import log
-from estimator import CumulativeGradientEstimator
-from handle_datasets import mio_tcd_clss
-from lib import fetch_dataset, get_cummax
+from spectral_metric.config import log
+from spectral_metric.estimator import CumulativeGradientEstimator
+from spectral_metric.handle_datasets import mio_tcd_clss
+from spectral_metric.lib import fetch_dataset, get_cummax
 
 LOOP = 30
 LONG_LABEL = False

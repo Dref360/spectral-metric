@@ -1,0 +1,10 @@
+numpy
+seaborn
+joblib
+matplotlib
+scikit-learn
+keras
+opencv-python
+pandas
+tqdm
+git+https://github.com/DmitryUlyanov/Multicore-TSNE.git

@@ -11,10 +11,10 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from keras.optimizers import SGD
 from keras.utils import to_categorical
 
-from accuracy.model_definition import models
-from config import TMP_DIR
-from embedding.utils import unison_shuffled_copies, split, resize_all, need_sequence
-from handle_datasets import all_datasets, paper_dataset, make_small
+from spectral_metric.accuracy.model_definition import models
+from spectral_metric.config import TMP_DIR
+from spectral_metric.embedding.utils import unison_shuffled_copies, split, resize_all, need_sequence
+from spectral_metric.handle_datasets import all_datasets, paper_dataset, make_small
 
 opt = lambda: SGD(0.001, 0.9, nesterov=True)
 
@@ -132,7 +132,7 @@ def job(ds_name, model_name='alexnet', n_sample=None):
     if not need_sequence(data):
         fit(ds_name, data, target, xval, yval, x_test, y_test, n_sample, model_name)
     else:
-        from accuracy.cnn_train_generator import fit_generator
+        from spectral_metric.accuracy.cnn_train_generator import fit_generator
         fit_generator(ds_name, data, target, xval, yval, x_test, y_test, n_sample, model_name)
 
 

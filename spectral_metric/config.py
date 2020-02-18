@@ -3,13 +3,13 @@ import types
 
 import numpy as np
 
-from handle_datasets import all_datasets
+from spectral_metric.handle_datasets import all_datasets
 
 EMBEDDINGS = ['embd', 'cnn_embd', 'vgg', 'xception']
 
 pjoin = os.path.join
 
-TMP_DIR = pjoin(os.path.dirname(__file__), 'tmp3')
+TMP_DIR = pjoin(os.path.dirname(__file__), 'tmp')
 if not os.path.exists(TMP_DIR):
     os.mkdir(TMP_DIR)
 

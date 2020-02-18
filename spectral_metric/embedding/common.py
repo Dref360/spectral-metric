@@ -8,8 +8,8 @@ from keras import Model
 from keras.applications.imagenet_utils import preprocess_input
 from keras.utils import Sequence
 
-from config import TMP_DIR
-from embedding.utils import resize_all, need_sequence
+from spectral_metric.config import TMP_DIR
+from spectral_metric.embedding.utils import resize_all, need_sequence
 
 pjoin = os.path.join
 

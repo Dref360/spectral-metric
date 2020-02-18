@@ -4,9 +4,9 @@ import keras.backend as K
 from keras import Input
 from keras.layers import Conv2D, Conv2DTranspose, MaxPool2D, ZeroPadding2D, BatchNormalization
 
-from embedding.common import GenericAutoEncoder, EmbeddingGetter
-from embedding.utils import need_sequence
-from handle_datasets import all_datasets, paper_dataset
+from spectral_metric.embedding.common import GenericAutoEncoder, EmbeddingGetter
+from spectral_metric.embedding.utils import need_sequence
+from spectral_metric.handle_datasets import all_datasets, paper_dataset
 
 pjoin = os.path.join
 

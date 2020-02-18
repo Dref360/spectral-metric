@@ -3,11 +3,11 @@ import os
 import scipy as sp
 import scipy.stats
 from sklearn.metrics.pairwise import *
-from sklearn.neighbors.dist_metrics import DistanceMetric
+from sklearn.neighbors import DistanceMetric
 
-from config import log, read_ds
-from embedding import *
-from handle_datasets import make_small, randomize
+from spectral_metric.config import log, read_ds
+from spectral_metric.embedding import *
+from spectral_metric.handle_datasets import make_small, randomize
 
 pjoin = os.path.join
 
