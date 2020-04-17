@@ -2,6 +2,8 @@
 
 This is the code to reproduce the CVPR 2019 paper : Spectral Metric for Dataset Complexity Assessment. 
 
+Paper: https://arxiv.org/pdf/1905.07299.pdf
+
 CSG is a measure which estimates the complexity of a dataset by combining probability product kernel (Jebara et al.) and Graph Theory.
 
 ## Module
