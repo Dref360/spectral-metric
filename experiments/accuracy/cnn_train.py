@@ -11,10 +11,10 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from keras.optimizers import SGD
 from keras.utils import to_categorical
 
-from spectral_metric.accuracy.model_definition import models
-from spectral_metric.config import TMP_DIR
-from spectral_metric.embedding.utils import unison_shuffled_copies, split, resize_all, need_sequence
-from spectral_metric.handle_datasets import all_datasets, paper_dataset, make_small
+from accuracy.model_definition import models
+from config import TMP_DIR
+from embedding.utils import unison_shuffled_copies, split, resize_all, need_sequence
+from handle_datasets import all_datasets, paper_dataset, make_small
 
 opt = lambda: SGD(0.001, 0.9, nesterov=True)
 

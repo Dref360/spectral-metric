@@ -2,8 +2,8 @@ import argparse
 
 from tqdm import tqdm
 
-from spectral_metric.config import EMBEDDINGS, make_config
-from spectral_metric.visualize import test_job, plot_with_err, visualize
+from config import EMBEDDINGS, make_config
+from visualize import test_job, plot_with_err, visualize
 
 
 def parse_arg():

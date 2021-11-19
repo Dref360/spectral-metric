@@ -7,11 +7,11 @@ from keras.applications.imagenet_utils import preprocess_input
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from keras.utils import Sequence
 
-from spectral_metric.accuracy.cnn_train import opt, pjoin
-from spectral_metric.accuracy.model_definition import models
-from spectral_metric.config import TMP_DIR
-from spectral_metric.embedding.utils import resize_all, unison_shuffled_copies
-from spectral_metric.handle_datasets import make_small
+from accuracy.cnn_train import opt, pjoin
+from accuracy.model_definition import models
+from config import TMP_DIR
+from embedding.utils import resize_all, unison_shuffled_copies
+from handle_datasets import make_small
 
 
 class LongSeq(Sequence):

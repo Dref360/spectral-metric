@@ -1,6 +1,7 @@
 numpy
 seaborn
 joblib
+spectral_metric
 matplotlib
 scikit-learn
 keras

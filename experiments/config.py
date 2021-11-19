@@ -3,7 +3,7 @@ import types
 
 import numpy as np
 
-from spectral_metric.handle_datasets import all_datasets
+from handle_datasets import all_datasets
 
 EMBEDDINGS = ['embd', 'cnn_embd', 'vgg', 'xception']
 
