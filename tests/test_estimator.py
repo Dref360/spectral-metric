@@ -14,9 +14,10 @@ def a_3_class_dataset():
     return x, y
 
 
-def test_estimator(a_3_class_dataset):
+@pytest.mark.parametrize('distance', ["euclidean", "cosine"])
+def test_estimator(a_3_class_dataset, distance):
     x, y = a_3_class_dataset
-    csg = CumulativeGradientEstimator(10, 5)
+    csg = CumulativeGradientEstimator(10, 5, distance=distance)
     csg.fit(x, y)
     assert len(csg.evals) == N_CLASS and np.allclose(csg.evals.min(), 0)
     assert csg.evecs.shape == (N_CLASS, N_CLASS)

@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 
 class CumulativeGradientEstimator(object):
-    def __init__(self, M_sample=250, k_nearest=3):
+    def __init__(self, M_sample=250, k_nearest=3, distance="euclidean"):
         """
         The Cumulative Gradient Estimator, estimates the complexity of a dataset.
         Args:
@@ -21,6 +21,7 @@ class CumulativeGradientEstimator(object):
         """
         self.M_sample = M_sample
         self.k_nearest = k_nearest
+        self.distance = distance
 
     def fit(self, data, target):
         """
@@ -49,7 +50,12 @@ class CumulativeGradientEstimator(object):
         """
         # Compute E_{p(x\mid C_i)} [p(x\mid C_j)]
         self.S, self.samples = compute_expectation_with_monte_carlo(
-            data, target, class_samples, n_class=self.n_class, k_nearest=self.k_nearest
+            data,
+            target,
+            class_samples,
+            n_class=self.n_class,
+            k_nearest=self.k_nearest,
+            distance=self.distance,
         )
 
         # Compute the D matrix
