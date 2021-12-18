@@ -1,11 +1,12 @@
 import logging
 import os
-from typing import Tuple
+from collections import defaultdict
+from typing import Tuple, List, Dict
 
 import numpy as np
 import scipy as sp
 import scipy.stats
-from sklearn.neighbors import DistanceMetric
+from sklearn.metrics import pairwise_distances
 
 log = logging.getLogger(__name__)
 pjoin = os.path.join
@@ -13,8 +14,13 @@ Array = np.ndarray
 
 
 def compute_expectation_with_monte_carlo(
-    data: Array, target: Array, class_samples: Array, n_class: int, k_nearest=5
-) -> Array:
+    data: Array,
+    target: Array,
+    class_samples: Array,
+    n_class: int,
+    k_nearest=5,
+    distance: str = "euclidean",
+) -> Tuple[Array, Dict[int, List]]:
     """
     Compute E_{p(x | C_i)} [p(x | C_j)] for all classes from samples
     with a monte carlo estimator.
@@ -24,6 +30,7 @@ def compute_expectation_with_monte_carlo(
         class_samples: [n_class, M, n_features], the M samples per class
         n_class: The number of classes
         k_nearest: number of neighbors for k-NN
+        distance: Which distance to use
 
     Returns: [n_class, n_class] matrix with probabilities
 
@@ -38,11 +45,11 @@ def compute_expectation_with_monte_carlo(
         return res
 
     expectation = np.zeros([n_class, n_class])
+    samples = defaultdict(list)
     # For each class, we compute the expectation from the samples.
     # Create a  matrix of similarity [n_class, M, n_samples]
-    # http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.DistanceMetric.html
-    dist = DistanceMetric.get_metric("euclidean")
-    similarities = lambda k: np.array(dist.pairwise(class_samples[k], data))
+    # https://scikit-learn.org/stable/modules/metrics.html#metrics
+    similarities = lambda k: np.array(pairwise_distances(class_samples[k], data, metric=distance))
 
     for k in range(n_class):
         # Compute E_{p(x\mid C_i)} [p(x\mid C_j)] using a Parzen-Window
@@ -51,9 +58,11 @@ def compute_expectation_with_monte_carlo(
             nearest = to_keep.argsort()[: k_nearest + 1]
             target_k = np.array(target)[nearest[1:]]
             # Get the Parzen-Window probability
-            expectation[k] += (
-                np.array([(target_k == ki).sum() / len(target_k) for ki in range(n_class)])
+            probability = np.array(
+                [(target_k == ki).sum() / len(target_k) for ki in range(n_class)]
             ) / get_volume(data[nearest])
+            expectation[k] += probability
+            samples[k].append(probability)
 
         # Normalize the proportion for Bray-Curtis
         expectation[k] /= expectation[k].sum()
@@ -64,7 +73,7 @@ def compute_expectation_with_monte_carlo(
     # Logging
     log.info("----------------Diagonal--------------------")
     log.info(np.round(np.diagonal(expectation), 4))
-    return expectation
+    return expectation, samples
 
 
 def find_samples(data: np.ndarray, target: np.ndarray, n_class: int, M=100) -> np.ndarray:

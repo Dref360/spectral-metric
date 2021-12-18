@@ -24,3 +24,7 @@ def test_estimator(a_3_class_dataset):
     assert csg.csg >= 0
     assert csg.difference.shape == (N_CLASS, N_CLASS)
     assert np.allclose(csg.difference.diagonal(), 0)
+    assert list(csg.samples.keys()) == list(range(N_CLASS))
+    for items in csg.samples.values():
+        assert len(items) == 10
+        assert all(item.shape == (N_CLASS,) for item in items)
