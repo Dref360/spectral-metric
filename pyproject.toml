@@ -17,7 +17,7 @@ pytest = "^6.2.5"
 flake8 = "^4.0.1"
 black = "^21.11b1"
 mypy = "^0.910"
-ipython = "^7.29.0"
+ipython = "^7.31.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
