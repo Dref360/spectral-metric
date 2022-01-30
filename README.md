@@ -8,6 +8,7 @@ CSG is a measure which estimates the complexity of a dataset by combining probab
 Graph Theory. By doing so, one can estimate the complexity of their dataset without training a model.
 
 For the experiment part of the repo, please see [./experiments/README.md](./experiments/README.md)
+To see the library in action, here's a "real-life" usecase in [this notebook](./notebooks/clinc_oos.ipynb).
 
 ![](./images/example.png)
 
