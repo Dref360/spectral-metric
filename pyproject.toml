@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "spectral_metric"
-version = "0.3.0"
+version = "0.4.0"
 description = "Implementation of Cumulative Spectral Gradient (CSG), a measure to estimate the complexity of datasets. This works has been presented at CVPR 2019."
 authors = ["Dref360 <frederic.branchaud.charron@gmail.com>"]
 license = "MIT"
@@ -18,6 +18,11 @@ flake8 = "^4.0.1"
 black = "^21.11b1"
 mypy = "^0.910"
 ipython = "^7.29.0"
+jupyterlab = "^3.2.8"
+# For notebooks
+datasets = "^1.18.2"
+sentence-transformers = "^2.1.0"
+ipywidgets = "^7.6.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

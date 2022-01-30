@@ -18,6 +18,7 @@ class CumulativeGradientEstimator(object):
         Args:
             M_sample (int): Number of sample per class to use
             k_nearest (int): Number of neighbours to look to compute $P(C_c \vert x)$.
+            distance: name of the distance to use.
         """
         self.M_sample = M_sample
         self.k_nearest = k_nearest
@@ -35,7 +36,9 @@ class CumulativeGradientEstimator(object):
         self.n_class = len(np.unique(target))
 
         # Do class sampling
-        class_samples = np.array(find_samples(data_x, target, self.n_class, M=self.M_sample))
+        class_samples, self.class_indices = find_samples(
+            data_x, target, self.n_class, M=self.M_sample
+        )
 
         self.compute(data_x, target, class_samples)
         return self

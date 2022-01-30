@@ -76,7 +76,9 @@ def compute_expectation_with_monte_carlo(
     return expectation, samples
 
 
-def find_samples(data: np.ndarray, target: np.ndarray, n_class: int, M=100) -> np.ndarray:
+def find_samples(
+    data: np.ndarray, target: np.ndarray, n_class: int, M=100, seed=None
+) -> Tuple[np.ndarray, Dict]:
     """
     Find M samples per class
     Args:
@@ -84,21 +86,23 @@ def find_samples(data: np.ndarray, target: np.ndarray, n_class: int, M=100) -> n
         target: [num_samples], the classes
         n_class: The number of classes
         M: (int, float), Number or proportion of sample per class
+        seed: seeding for sampling.
 
 
     Returns: [n_class, M, n_features], the M samples per class
+    and a dictionary with the selected indices per class.
 
     """
+    rng = np.random.RandomState(seed)
     class_samples = []
+    class_indices = {}
+    indices = np.arange(len(data))
     for k in range(n_class):
-        data_in_cls = data[target == k]
-        to_take = M if M > 1 else int(M * len(data_in_cls))
-        class_samples.append(
-            data_in_cls[
-                np.random.choice(len(data_in_cls), min(to_take, len(data_in_cls)), replace=False)
-            ]
-        )
-    return np.array(class_samples)
+        indices_in_cls = rng.permutation(indices[target == k])
+        to_take = min(M if M > 1 else int(M * len(indices_in_cls)), len(indices_in_cls))
+        class_samples.append(data[indices_in_cls[:to_take]])
+        class_indices[k] = indices_in_cls[:to_take]
+    return np.array(class_samples), class_indices
 
 
 def get_cummax(eigens: np.ndarray) -> Tuple[float, float]:
