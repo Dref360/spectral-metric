@@ -48,3 +48,21 @@ higher the values are, the harder the dataset is.
 this is done to overcome issues where the first classes are easy to separate, but not the last ones.
 
 Please see the paper for more details.
+
+
+# Contributing
+
+We are open to contributions, simply submit an issue or a pull request.
+
+To get yourself a running environment you will need [Poetry](https://python-poetry.org/), our package manager.
+
+```bash
+# Install the package and the development dependencies
+poetry install 
+
+# Format the code
+make format
+
+# Test with flake8, mypy and pytest
+make test
+```
