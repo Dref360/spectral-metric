@@ -29,7 +29,7 @@ csg = estimator.csg  # The actual complexity values.
 estimator.evals, estimator.evecs  # The eigenvalues and vectors.
 
 # You can plot the dataset with:
-make_graph(estimator.difference, "Your dataset", ["A", "B", "C"])
+make_graph(estimator.difference, title="Your dataset", classes=["A", "B", "C"])
 ```
 
 ## Support
