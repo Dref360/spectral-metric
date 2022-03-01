@@ -32,11 +32,13 @@ def compute_expectation_with_monte_carlo(
         class_samples: [n_class, M, n_features], the M samples per class
         class_indices: [n_class, indices], the indices of samples per class
         n_class: The number of classes
-        k_nearest: number of neighbors for k-NN
-        distance: Which distance to use
+        k_nearest: The number of neighbors for k-NN
+        distance: Which distance metric to use
 
-    Returns: [n_class, n_class] matrix with probabilities
-    #### CORRECT THIS
+    Returns:
+        expectation: [n_class, n_class], matrix with probabilities
+        similarity_arrays: [n_class, M, SimilarityArrays], dict of arrays with kNN class
+        proportions, raw and normalized by the Parzen-window, accessed via class and sample indices
 
     """
 
