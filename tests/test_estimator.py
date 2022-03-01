@@ -3,6 +3,7 @@ import pytest
 from sklearn.datasets import make_blobs
 
 from spectral_metric.estimator import CumulativeGradientEstimator
+from spectral_metric.types import SimilarityArrays
 
 N_CLASS = 3
 
@@ -17,7 +18,7 @@ def a_3_class_dataset():
 @pytest.mark.parametrize('distance', ["euclidean", "cosine"])
 def test_estimator(a_3_class_dataset, distance):
     x, y = a_3_class_dataset
-    csg = CumulativeGradientEstimator(10, 5, distance=distance)
+    csg = CumulativeGradientEstimator(M_sample=10, k_nearest=5, distance=distance)
     csg.fit(x, y)
     assert len(csg.evals) == N_CLASS and np.allclose(csg.evals.min(), 0)
     assert csg.evecs.shape == (N_CLASS, N_CLASS)
@@ -25,7 +26,13 @@ def test_estimator(a_3_class_dataset, distance):
     assert csg.csg >= 0
     assert csg.difference.shape == (N_CLASS, N_CLASS)
     assert np.allclose(csg.difference.diagonal(), 0)
-    assert list(csg.samples.keys()) == list(range(N_CLASS))
-    for items in csg.samples.values():
+    assert list(csg.similarity_arrays.keys()) == list(range(N_CLASS))
+    for items in csg.similarity_arrays.values():
         assert len(items) == 10
-        assert all(item.shape == (N_CLASS,) for item in items)
+        for sample_id_key in items:
+            assert isinstance(items[sample_id_key], SimilarityArrays)
+            assert(len(items[sample_id_key].sample_probability) ==
+                   len(items[sample_id_key].sample_probability_norm) == N_CLASS)
+            assert items[sample_id_key].sample_probability.sum() == 1
+    for s_matrix_row in csg.S:
+        assert s_matrix_row.sum() == pytest.approx(1, 1E-20)

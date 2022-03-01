@@ -8,19 +8,21 @@ import scipy as sp
 import scipy.stats
 from sklearn.metrics import pairwise_distances
 
+from spectral_metric.types import Array, SimilarityArrays
+
 log = logging.getLogger(__name__)
 pjoin = os.path.join
-Array = np.ndarray
 
 
 def compute_expectation_with_monte_carlo(
     data: Array,
     target: Array,
     class_samples: Array,
+    class_indices: Dict,
     n_class: int,
     k_nearest=5,
     distance: str = "euclidean",
-) -> Tuple[Array, Dict[int, List]]:
+) -> Tuple[Array, Dict[int, Dict[int, SimilarityArrays]]]:
     """
     Compute E_{p(x | C_i)} [p(x | C_j)] for all classes from samples
     with a monte carlo estimator.
@@ -28,11 +30,13 @@ def compute_expectation_with_monte_carlo(
         data: [num_samples, n_features], the inputs
         target: [num_samples], the classes
         class_samples: [n_class, M, n_features], the M samples per class
+        class_indices: [n_class, indices], the indices of samples per class
         n_class: The number of classes
         k_nearest: number of neighbors for k-NN
         distance: Which distance to use
 
     Returns: [n_class, n_class] matrix with probabilities
+    #### CORRECT THIS
 
     """
 
@@ -44,28 +48,34 @@ def compute_expectation_with_monte_carlo(
         res = max(1e-4, dst)
         return res
 
-    expectation = np.zeros([n_class, n_class])
-    samples = defaultdict(list)
+    similarity_arrays : Dict[int, Dict[int, SimilarityArrays]] = defaultdict(dict)
+    expectation = np.zeros([n_class, n_class])  # S-matrix
+
     # For each class, we compute the expectation from the samples.
-    # Create a  matrix of similarity [n_class, M, n_samples]
+    # Create a matrix of similarity [n_class, M, n_samples]
     # https://scikit-learn.org/stable/modules/metrics.html#metrics
     similarities = lambda k: np.array(pairwise_distances(class_samples[k], data, metric=distance))
 
-    for k in range(n_class):
+    for class_ix in range(n_class):
         # Compute E_{p(x\mid C_i)} [p(x\mid C_j)] using a Parzen-Window
-        all_keep = similarities(k)
-        for to_keep in all_keep:
-            nearest = to_keep.argsort()[: k_nearest + 1]
-            target_k = np.array(target)[nearest[1:]]
+        all_similarities = similarities(class_ix)  # Distance arrays for all class samples
+        all_indices = class_indices[class_ix]  # Indices for all class samples
+        for m, sample_ix in enumerate(all_indices):
+            indices_k = all_similarities[m].argsort()[: k_nearest + 1]  # kNN indices (incl self)
+            target_k = np.array(target)[indices_k[1:]]  # kNN class labels (self is dropped)
             # Get the Parzen-Window probability
             probability = np.array(
-                [(target_k == ki).sum() / len(target_k) for ki in range(n_class)]
-            ) / get_volume(data[nearest])
-            expectation[k] += probability
-            samples[k].append(probability)
+                # kNN class proportions
+                [(target_k == nghbr_class).sum() / k_nearest for nghbr_class in range(n_class)]
+            )
+            probability_norm = probability / get_volume(data[indices_k])  # Parzen-window normalized
+            similarity_arrays[class_ix][sample_ix] = SimilarityArrays(
+                sample_probability=probability, sample_probability_norm=probability_norm
+            )
+            expectation[class_ix] += probability_norm
 
-        # Normalize the proportion for Bray-Curtis
-        expectation[k] /= expectation[k].sum()
+        # Normalize the proportions to facilitate row comparison
+        expectation[class_ix] /= expectation[class_ix].sum()
 
     # Make everything nice by replacing INF with zero values.
     expectation[np.logical_not(np.isfinite(expectation))] = 0
@@ -73,7 +83,7 @@ def compute_expectation_with_monte_carlo(
     # Logging
     log.info("----------------Diagonal--------------------")
     log.info(np.round(np.diagonal(expectation), 4))
-    return expectation, samples
+    return expectation, similarity_arrays
 
 
 def find_samples(
