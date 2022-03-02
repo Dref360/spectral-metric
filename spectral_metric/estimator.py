@@ -52,10 +52,11 @@ class CumulativeGradientEstimator(object):
             class_samples : class samples, ndarray (n_class, M, n_features)
         """
         # Compute E_{p(x\mid C_i)} [p(x\mid C_j)]
-        self.S, self.samples = compute_expectation_with_monte_carlo(
+        self.S, self.similarity_arrays = compute_expectation_with_monte_carlo(
             data,
             target,
             class_samples,
+            class_indices=self.class_indices,
             n_class=self.n_class,
             k_nearest=self.k_nearest,
             distance=self.distance,
