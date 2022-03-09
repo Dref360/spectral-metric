@@ -1,15 +1,18 @@
-# Cumulative Spectral Gradient (CSG) metric
+# Spectral Metric
 
-This library provides an implementation of CSG, from CVPR 2019 paper: Spectral Metric for Dataset Complexity Assessment.
+This library provides an implementation of CSG, from CVPR 2019 paper: [Spectral Metric for Dataset Complexity Assessment](https://arxiv.org/abs/1905.07299).
 
-Paper: https://arxiv.org/abs/1905.07299
+[Documentation](https://dref360.github.io/spectral-metric/)
 
 CSG is a measure which estimates the complexity of a dataset by combining probability product kernel (Jebara et al.) and
 Graph Theory. By doing so, one can estimate the complexity of their dataset without training a model.
 
 For the experiment part of the repo, please see [./experiments/README.md](./experiments/README.md)
 
-To see the library in action, here's a "real-life" usecase in [this notebook](./notebooks/clinc_oos.ipynb).
+**Spectral metric in action**:
+
+1. [🤗 HuggingFace Space](https://huggingface.co/spaces/Dref360/spectral-metric)
+2. [In-depth analysis of CLINC-150](https://github.com/Dref360/spectral-metric/blob/master/notebooks/clinc_oos.ipynb)
 
 ![](./images/example.png)
 

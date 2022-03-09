@@ -7,7 +7,7 @@ Spectral metric is **domain agnostic** and **fast** compared to previous state-o
 
 Spectral metric in action:
 
-1. [HuggingFace Space](https://huggingface.co/spaces/Dref360/spectral-metric)
+1. [🤗 HuggingFace Space](https://huggingface.co/spaces/Dref360/spectral-metric)
 2. [In-depth analysis of CLINC-150](https://github.com/Dref360/spectral-metric/blob/master/notebooks/clinc_oos.ipynb)
 
 
