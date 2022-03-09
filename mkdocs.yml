@@ -1,0 +1,50 @@
+site_name: Spectral metric
+site_author: Frédéric Branchaud-Charron
+site_description: >-
+  Perform data-centric analysis of our dataset using spectral analysis and CSG (Branchaud-Charron et al, 2019)
+# Repository
+repo_name: Dref360/spectral-metric
+repo_url: https://github.com/Dref360/spectral-metric
+edit_uri: ""
+plugins:
+  - search
+  - mkdocstrings
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    primary: cyan
+  features:
+    - search.highlight
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.tracking
+    - toc.integrate
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - footnotes
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Get Started: get-started.md
+  - API:
+    - api/estimator.md
+    - api/lib.md
+
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Dref360
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/spectral-metric/

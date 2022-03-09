@@ -24,7 +24,7 @@ def compute_expectation_with_monte_carlo(
     distance: str = "euclidean",
 ) -> Tuple[Array, Dict[int, Dict[int, SimilarityArrays]]]:
     """
-    Compute E_{p(x | C_i)} [p(x | C_j)] for all classes from samples
+    Compute $E_{p(x | C_i)} [p(x | C_j)]$ for all classes from samples
     with a monte carlo estimator.
     Args:
         data: [num_samples, n_features], the inputs
@@ -38,7 +38,8 @@ def compute_expectation_with_monte_carlo(
     Returns:
         expectation: [n_class, n_class], matrix with probabilities
         similarity_arrays: [n_class, M, SimilarityArrays], dict of arrays with kNN class
-        proportions, raw and normalized by the Parzen-window, accessed via class and sample indices
+                            proportions, raw and normalized by the Parzen-window,
+                            accessed via class and sample indices
 
     """
 
