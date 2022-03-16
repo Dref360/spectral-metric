@@ -14,7 +14,7 @@ theme:
   icon:
     repo: fontawesome/brands/github
   palette:
-    primary: cyan
+    primary: teal
   features:
     - search.highlight
     - navigation.tabs
