@@ -1,8 +1,18 @@
-# Spectral Metric
+<p align="center">
+    <br>
+    <h1 align="center">
+      Spectral Metric
+    </h1>
+    <br>
+<p align="center">
+  <a href="https://dref360.github.io/spectral-metric">
+    Documentation
+  </a>
+</p>
 
 This library provides an implementation of CSG, from CVPR 2019 paper: [Spectral Metric for Dataset Complexity Assessment](https://arxiv.org/abs/1905.07299).
 
-[Documentation](https://dref360.github.io/spectral-metric/)
+
 
 CSG is a measure which estimates the complexity of a dataset by combining probability product kernel (Jebara et al.) and
 Graph Theory. By doing so, one can estimate the complexity of their dataset without training a model.
