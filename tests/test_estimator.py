@@ -50,4 +50,4 @@ def test_mismatched_labels(a_3_class_dataset_with_wrong_indexing):
     csg = CumulativeGradientEstimator(M_sample=10, k_nearest=5)
     csg.fit(x, y)
     assert csg.evecs.shape == (N_CLASS + 1, N_CLASS + 1)
-    assert csg.evals == N_CLASS + 1
+    assert csg.evals.shape == (N_CLASS + 1, )
