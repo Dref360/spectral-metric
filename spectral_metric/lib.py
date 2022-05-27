@@ -17,8 +17,8 @@ pjoin = os.path.join
 def compute_expectation_with_monte_carlo(
     data: Array,
     target: Array,
-    class_samples: Array,
-    class_indices: Dict,
+    class_samples: Dict[int, Array],
+    class_indices: Dict[int, Array],
     n_class: int,
     k_nearest=5,
     distance: str = "euclidean",
@@ -51,7 +51,7 @@ def compute_expectation_with_monte_carlo(
         res = max(1e-4, dst)
         return res
 
-    similarity_arrays : Dict[int, Dict[int, SimilarityArrays]] = defaultdict(dict)
+    similarity_arrays: Dict[int, Dict[int, SimilarityArrays]] = defaultdict(dict)
     expectation = np.zeros([n_class, n_class])  # S-matrix
 
     # For each class, we compute the expectation from the samples.
@@ -59,7 +59,7 @@ def compute_expectation_with_monte_carlo(
     # https://scikit-learn.org/stable/modules/metrics.html#metrics
     similarities = lambda k: np.array(pairwise_distances(class_samples[k], data, metric=distance))
 
-    for class_ix in range(n_class):
+    for class_ix in class_samples:
         # Compute E_{p(x\mid C_i)} [p(x\mid C_j)] using a Parzen-Window
         all_similarities = similarities(class_ix)  # Distance arrays for all class samples
         all_indices = class_indices[class_ix]  # Indices for all class samples
@@ -91,7 +91,7 @@ def compute_expectation_with_monte_carlo(
 
 def find_samples(
     data: np.ndarray, target: np.ndarray, n_class: int, M=100, seed=None
-) -> Tuple[np.ndarray, Dict]:
+) -> Tuple[Dict[int, Array], Dict[int, Array]]:
     """
     Find M samples per class
     Args:
@@ -102,20 +102,19 @@ def find_samples(
         seed: seeding for sampling.
 
 
-    Returns: [n_class, M, n_features], the M samples per class
-    and a dictionary with the selected indices per class.
+    Returns: Selected items per class and their indices.
 
     """
     rng = np.random.RandomState(seed)
-    class_samples = []
+    class_samples = {}
     class_indices = {}
     indices = np.arange(len(data))
-    for k in range(n_class):
+    for k in np.unique(target):
         indices_in_cls = rng.permutation(indices[target == k])
         to_take = min(M if M > 1 else int(M * len(indices_in_cls)), len(indices_in_cls))
-        class_samples.append(data[indices_in_cls[:to_take]])
+        class_samples[k] = data[indices_in_cls[:to_take]]
         class_indices[k] = indices_in_cls[:to_take]
-    return np.array(class_samples), class_indices
+    return class_samples, class_indices
 
 
 def get_cummax(eigens: np.ndarray) -> Tuple[float, float]:

@@ -4,6 +4,7 @@ from itertools import product
 import numpy as np
 import scipy
 import scipy.spatial
+from numpy.linalg import LinAlgError
 from scipy.sparse.csgraph import laplacian
 
 from spectral_metric.lib import find_samples, compute_expectation_with_monte_carlo
@@ -33,7 +34,7 @@ class CumulativeGradientEstimator(object):
         """
         np.random.seed(None)
         data_x = data.copy()
-        self.n_class = len(np.unique(target))
+        self.n_class = np.max(target) - np.min(target) + 1
 
         # Do class sampling
         class_samples, self.class_indices = find_samples(
@@ -49,7 +50,7 @@ class CumulativeGradientEstimator(object):
         Args:
             data: data samples, ndarray (n_samples, n_features)
             target: target samples, ndarray (n_samples)
-            class_samples : class samples, ndarray (n_class, M, n_features)
+            class_samples : class samples, Dict[class_idx, Array[M, n_features]]
         """
         # Compute E_{p(x\mid C_i)} [p(x\mid C_j)]
         self.S, self.similarity_arrays = compute_expectation_with_monte_carlo(
@@ -63,7 +64,7 @@ class CumulativeGradientEstimator(object):
         )
 
         # Compute the D matrix
-        self.W = np.empty([self.n_class, self.n_class])
+        self.W = np.eye(self.n_class)
         for i, j in product(range(self.n_class), range(self.n_class)):
             self.W[i, j] = 1 - scipy.spatial.distance.braycurtis(self.S[i], self.S[j])
 
@@ -71,8 +72,14 @@ class CumulativeGradientEstimator(object):
 
         # Get the Laplacian and its eigen values
         self.L_mat, dd = laplacian(self.W, False, True)
-        self.evals, self.evecs = np.linalg.eigh(self.L_mat)
-        self.csg = self._csg_from_evals(self.evals)
+        try:
+            self.evals, self.evecs = np.linalg.eigh(self.L_mat)
+            self.csg = self._csg_from_evals(self.evals)
+        except LinAlgError as e:
+            log.warning(f"{str(e)}; assigning `evals,evecs,csg` to NaN")
+            self.evals = np.ones([self.n_class]) * np.nan
+            self.evecs = np.ones([self.n_class, self.n_class]) * np.nan
+            self.csg = np.nan
 
     def _csg_from_evals(self, evals: np.ndarray) -> float:
         # [n_class]
