@@ -34,7 +34,7 @@ class CumulativeGradientEstimator(object):
         """
         np.random.seed(None)
         data_x = data.copy()
-        self.n_class = np.max(target) - np.min(target) + 1
+        self.n_class = np.max(target) - min(0, np.min(target)) + 1
 
         # Do class sampling
         class_samples, self.class_indices = find_samples(

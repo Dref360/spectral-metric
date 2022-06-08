@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "spectral_metric"
-version = "0.6.0"
+version = "0.6.1"
 description = "Implementation of Cumulative Spectral Gradient (CSG), a measure to estimate the complexity of datasets. This works has been presented at CVPR 2019."
 authors = ["Dref360 <frederic.branchaud.charron@gmail.com>"]
 license = "MIT"
