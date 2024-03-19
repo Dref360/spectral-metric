@@ -12,6 +12,9 @@
 
 This library provides an implementation of CSG, from CVPR 2019 paper: [Spectral Metric for Dataset Complexity Assessment](https://arxiv.org/abs/1905.07299).
 
+**Installation**
+
+`pip install spectral-metric`
 
 
 CSG is a measure which estimates the complexity of a dataset by combining probability product kernel (Jebara et al.) and
